@@ -1,0 +1,5 @@
+1. papers
+    https://paperswithcode.com/paper/a-unified-mrc-framework-for-named-entity
+
+2. repos
+    https://github.com/ShannonAI/mrc-for-flat-nested-ner
