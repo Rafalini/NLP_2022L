@@ -8,8 +8,8 @@ import consts
 import utils
 import os
 
-# use_cuda = torch.cuda.is_available()
-use_cuda = False
+use_cuda = torch.cuda.is_available()
+# use_cuda = False
 
 
 def prepare_bert(number_of_rows: int, num_labels: int) -> BertWrapper:
