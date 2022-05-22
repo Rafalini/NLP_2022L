@@ -45,7 +45,9 @@ def downloadBlurbDataset():
 
 
 def downloadConllDataset():
-    urls = ["https://data.deepai.org/conll2003.zip"]
+    urls = ["https://data.deepai.org/conll2003.zip",
+            "http://www.cnts.ua.ac.be/conll2003/eng.raw.tar",
+            "http://www.cnts.ua.ac.be/conll2003/deu.raw.tar"]
 
     print('Downloading CoNLL 2003 dataset, urls: '+str(len(urls)))
     conllPath = os.path.join(os.getcwd() + '/sourceData/conll2003')
@@ -53,7 +55,7 @@ def downloadConllDataset():
     if not os.path.exists(conllPath):
         os.mkdir(conllPath)
 
-    for url in urls:
+    for url in urls[1:]:
         datasetName = url.split('/')[-1]
         response = requests.get(url)
         open(os.path.join(conllPath, datasetName), "wb").write(response.content)
@@ -64,6 +66,6 @@ def downloadConllDataset():
 
 
 if __name__ == "__main__":
-    downloadGeniaDataset()
-    downloadBlurbDataset()
+    # downloadGeniaDataset()
+    # downloadBlurbDataset()
     downloadConllDataset()
