@@ -3,6 +3,9 @@ import numpy as np
 import os
 import random
 import warnings
+from sparknlp.training import CoNLL
+from sparknlp import SparkSession
+import sparknlp
 
 
 def seed_torch(seed=2137):
@@ -27,4 +30,26 @@ def turn_off_stupid_warnings():
 def prepare_environment():
     turn_off_stupid_warnings()
     seed_torch()
+
+
+def getDataset(path):
+    sparknlp.start()
+    spark = SparkSession.builder \
+        .appName("Spark NLP")\
+        .master("local[4]")\
+        .config("spark.driver.memory","16G")\
+        .config("spark.driver.maxResultSize", "0") \
+        .config("spark.kryoserializer.buffer.max", "2000M")\
+        .config("spark.jars.packages", "com.johnsnowlabs.nlp:spark-nlp_2.12:3.4.4")\
+        .getOrCreate()
+
+    return (CoNLL().readDataset(spark, path)).toPandas()
+    # trainingData = (CoNLL().readDataset(spark, path)).toPandas()
+    # print(type(trainingData))
+    # trainingData.selectExpr(
+    #     "text",
+    #     "token.result as tokens",
+    #     "pos.result as pos",
+    #     "label.result as label"
+    # ).show(3, False)
 
