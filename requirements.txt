@@ -2,3 +2,5 @@ requests
 pandas
 pyspark
 sparknlp
+simpletransformers
+torch==1.11.0+cu113
