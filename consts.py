@@ -11,8 +11,10 @@ CONL_PREPROC_TRAIN = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed
 CONL_PREPROC_TEST = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_test.csv')
 CONL_PREPROC_VALID = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_valid.csv')
 
-INIT_TRAIN_SIZE = 500
-MAX_TRAIN_SIZE = 1000
+# INIT_TRAIN_SIZE = 204565
+# MAX_TRAIN_SIZE = 204565
+INIT_TRAIN_SIZE = 100
+MAX_TRAIN_SIZE = 100
 STEP = 100
 
 #####################################################################
@@ -20,6 +22,6 @@ BERT_MODEL_TYPE = 'roberta'  # bert, roberta, xlm, ...
 BERT_MODEL_NAME = 'roberta-base'
 BERT_ARGS = ClassificationArgs(
     model_type=BERT_MODEL_TYPE,
-    # overwrite_output_dir=True
+    overwrite_output_dir=True
 )
 BERT_OUTPUT = 'bert-output'

@@ -1,16 +1,14 @@
 import pandas as pd
-import torch
 from simpletransformers.classification import ClassificationModel
+import torch
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
 from models.bert import BertWrapper
-from trainer import OurTrainer
 import consts
 import utils
-import os
 
 # use_cuda = torch.cuda.is_available()
 use_cuda = False
-
 
 def prepare_bert(number_of_rows: int, num_labels: int) -> BertWrapper:
     bert_args = consts.BERT_ARGS
@@ -26,25 +24,31 @@ def prepare_bert(number_of_rows: int, num_labels: int) -> BertWrapper:
     return BertWrapper(bert)
 
 
+
 if __name__ == '__main__':
     utils.prepare_environment()
-    print(os.getcwd())
-    raw_train_data = pd.read_csv(consts.CONL_PREPROC_TRAIN)
-    # test_data = pd.read_csv(consts.TEST_DATA)
-    # test_inputs, test_labels = utils.prepare_evaluation_data(test_data)
+
+    data = pd.read_csv(consts.CONL_PREPROC_TEST)
+    inputs, labels = utils.prepare_evaluation_data(data)
 
     train_size = consts.INIT_TRAIN_SIZE
+
     while train_size <= consts.MAX_TRAIN_SIZE:
         torch.cuda.empty_cache()
-        print("=" * 100)
-        print(f"Training for nrows={train_size}")
-        data = raw_train_data[0: train_size]
-        # print(data['label1'].value_counts())
-        model = prepare_bert(train_size, len(data['label1'].unique())+1)
-        trainer = OurTrainer(model)
-        trainer.train(data)
+        print("="*100)
+        print(f"Evaluating for nrows={train_size}")
 
-        # test_preds = trainer.model.predict(test_inputs)
-        # print(f" Number of positives: {sum(test_preds)}")
+        model = prepare_bert(train_size, len(data['label1'].unique())+1)
+        inputs = inputs[1: train_size]
+        labels = labels[1: train_size]
+
+        predictions = model.predict(inputs)
+        print(predictions)
+        print(f" -Number of predicted sarcasms: {sum(predictions)}\n")
+
+        print(f" -Precision:  {precision_score(labels, predictions, average='micro')}")
+        print(f" -Accuracy:   {accuracy_score(labels, predictions)}")
+        print(f" -Recall:     {recall_score(labels, predictions, average='weighted')}")
+        print(f" -F1 score:   {f1_score(labels, predictions, average='macro')}")
 
         train_size += consts.STEP

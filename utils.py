@@ -53,3 +53,8 @@ def getDataset(path):
     #     "label.result as label"
     # ).show(3, False)
 
+
+def prepare_evaluation_data(data):
+    inputs = data['text'].astype(str).values.tolist()
+    labels = data['label1'].astype(int).values.tolist()
+    return inputs, labels
