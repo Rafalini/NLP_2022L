@@ -29,7 +29,7 @@ def prepare_bert(number_of_rows: int, num_labels: int) -> BertWrapper:
 if __name__ == '__main__':
     utils.prepare_environment()
     print(os.getcwd())
-    raw_train_data = pd.read_csv(consts.CONL_PREPROC_TRAIN)
+    raw_train_data = pd.read_csv(consts.CONL_PREPROC_TRAIN_IO) # change here for different encoding
     # test_data = pd.read_csv(consts.TEST_DATA)
     # test_inputs, test_labels = utils.prepare_evaluation_data(test_data)
 
