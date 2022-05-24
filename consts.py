@@ -1,6 +1,10 @@
 import os
 from simpletransformers.classification import ClassificationArgs
 
+ENCODING = "IOB"
+# ENCODING = "IO"
+# ENCODING = "BIO"
+
 DATA_DIR = './data/sourceData'
 CONL_TRAIN_DATASET = os.path.join(DATA_DIR, 'conll2003', 'train.txt')
 CONL_TEST_DATASET = os.path.join(DATA_DIR, 'conll2003', 'test.txt')
