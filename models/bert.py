@@ -22,5 +22,5 @@ class BertWrapper(TextEntityClassifier):
         data = raw_data.copy()
         print(data.head)
         # 'text' and 'labels' columns already present, no need to do anything
-        data = data.astype({'text': str, 'label1': int})
-        return data[['text', 'label1']]
+        data = data.astype({'text': str, 'entityTag': int})
+        return data[['text', 'entityTag']]

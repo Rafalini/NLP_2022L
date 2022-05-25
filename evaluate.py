@@ -44,7 +44,7 @@ if __name__ == '__main__':
         print("="*100)
         print(f"Evaluating for nrows={train_size}")
 
-        model = prepare_bert(train_size, len(data['label1'].unique())+1)
+        model = prepare_bert(train_size, len(data['entityTag'].unique())+1)
         inputs = inputs[1: train_size]
         labels = labels[1: train_size]
 

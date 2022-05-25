@@ -47,7 +47,7 @@ if __name__ == '__main__':
         print(f"Training for nrows={train_size}")
         data = raw_train_data[0: train_size]
         # print(data['label1'].value_counts())
-        model = prepare_bert(train_size, len(data['label1'].unique())+1)
+        model = prepare_bert(train_size, len(data['entityTag'].unique())+1)
         trainer = OurTrainer(model)
         trainer.train(data)
 
