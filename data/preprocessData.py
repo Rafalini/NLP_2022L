@@ -35,12 +35,12 @@ def simpleCSV(input, output, encoding):
     # df['-X-.1'] = df['-X-.1'].rank(method='dense', ascending=False).astype(int)
     # df['O'] = df['O'].rank(method='dense', ascending=False).astype(int)-1
     df = df.drop(columns=['-X-']).drop(columns=['-X-.1'])
-    df.rename(columns={'O': 'label1', '-DOCSTART-': 'text'}, inplace=True)
+    df.rename(columns={'O': 'entityTag', '-DOCSTART-': 'text'}, inplace=True)
     if encoding == 'IO':
-        df['label1'] = IOB2IO(df['label1'])
+        df['entityTag'] = IOB2IO(df['entityTag'])
     if encoding == 'BIO':
-        df['label1'] = IOB2BIO(df['label1'])
-    df['label1'] = pd.factorize(df['label1'])[0]
+        df['entityTag'] = IOB2BIO(df['entityTag'])
+    df['entityTag'] = pd.factorize(df['entityTag'])[0]
     df.to_csv(output)
 
 
