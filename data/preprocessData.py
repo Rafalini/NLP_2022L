@@ -46,7 +46,7 @@ def simpleCSV(input, output, encoding):
 
 def newCSV(input, output):
     df = pd.read_csv(filepath_or_buffer=input, sep=' ')
-    df.rename(columns={'-DOCSTART-': 'text', '-X-': 'partofSpeach', '-X-.1': 'syntactic', 'O': 'entityTag'}, inplace=True)
+    df.rename(columns={'-DOCSTART-': 'text', '-X-': 'partOfSpeach', '-X-.1': 'syntactic', 'O': 'entityTag'}, inplace=True)
     print(df.head)
     df.to_csv(output)
 
