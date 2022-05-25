@@ -20,7 +20,6 @@ class BertWrapper(TextEntityClassifier):
 
     def prepare_training_data(self, raw_data: pd.DataFrame):
         data = raw_data.copy()
-        print(data.head)
+        # print(data.head)
         # 'text' and 'labels' columns already present, no need to do anything
-        data = data.astype({'text': str, 'label1': int})
-        return data[['text', 'label1']]
+        return data[['text', 'labels']]

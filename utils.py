@@ -3,9 +3,15 @@ import numpy as np
 import os
 import random
 import warnings
+
+from simpletransformers.classification import MultiLabelClassificationModel
+from simpletransformers.config.model_args import MultiLabelClassificationArgs
 from sparknlp.training import CoNLL
 from sparknlp import SparkSession
 import sparknlp
+
+import consts
+from models.bert import BertWrapper
 
 
 def seed_torch(seed=2137):
@@ -44,17 +50,47 @@ def getDataset(path):
         .getOrCreate()
 
     return (CoNLL().readDataset(spark, path)).toPandas()
-    # trainingData = (CoNLL().readDataset(spark, path)).toPandas()
-    # print(type(trainingData))
-    # trainingData.selectExpr(
-    #     "text",
-    #     "token.result as tokens",
-    #     "pos.result as pos",
-    #     "label.result as label"
-    # ).show(3, False)
 
 
 def prepare_evaluation_data(data):
     inputs = data['text'].astype(str).values.tolist()
     labels = data['label1'].astype(int).values.tolist()
     return inputs, labels
+
+
+def prepare_multilabel_data(data, datasize: int):
+    data = data[:datasize] #reduce size
+
+    partOfSpeach = data['partOfSpeach'].unique()
+    syntactic = data['syntactic'].unique()
+    entityTag = data['entityTag'].unique()
+
+    labels = []
+
+    for index, row in data.iterrows():
+        label = []
+        label.append(np.where(partOfSpeach == row['partOfSpeach'])[0][0])
+        label.append(np.where(syntactic == row['syntactic'])[0][0])
+        label.append(np.where(entityTag == row['entityTag'])[0][0])
+        labels.append(label)
+
+    data = data.drop(columns=['partOfSpeach', 'syntactic', 'entityTag'])
+    data['labels'] = labels
+    return data
+
+
+def prepare_bert(number_of_rows: int, use_cuda) -> BertWrapper:
+    bert_args = MultiLabelClassificationArgs(
+        num_train_epochs=consts.EPOCHS,
+        overwrite_output_dir=True,
+        output_dir=f"{consts.BERT_OUTPUT}-{number_of_rows}",
+    )
+
+    bert = MultiLabelClassificationModel(
+        consts.BERT_MODEL_TYPE,
+        consts.BERT_MODEL_NAME,
+        use_cuda=use_cuda,
+        num_labels=3,
+        args=bert_args
+    )
+    return BertWrapper(bert)
