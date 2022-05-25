@@ -68,10 +68,10 @@ def prepare_multilabel_data(data, datasize: int):
     labels = []
 
     for index, row in data.iterrows():
-        label = []
-        label.append(np.where(partOfSpeach == row['partOfSpeach'])[0][0])
-        label.append(np.where(syntactic == row['syntactic'])[0][0])
-        label.append(np.where(entityTag == row['entityTag'])[0][0])
+        label = [0]*(len(partOfSpeach) + len(syntactic) + len(entityTag))
+        label[np.where(partOfSpeach == row['partOfSpeach'])[0][0]] = 1
+        label[np.where(syntactic == row['syntactic'])[0][0] + len(partOfSpeach)] = 1
+        label[np.where(entityTag == row['entityTag'])[0][0] + len(partOfSpeach) + len(syntactic)] = 1
         labels.append(label)
 
     data = data.drop(columns=['partOfSpeach', 'syntactic', 'entityTag'])
@@ -79,16 +79,30 @@ def prepare_multilabel_data(data, datasize: int):
     return data
 
 
-def prepare_bert(number_of_rows: int, use_cuda) -> BertWrapper:
+def prepare_bert_train(number_of_rows: int, use_cuda) -> BertWrapper:
     bert_args = MultiLabelClassificationArgs(
         num_train_epochs=consts.EPOCHS,
         overwrite_output_dir=True,
         output_dir=f"{consts.BERT_OUTPUT}-{number_of_rows}",
     )
-
     bert = MultiLabelClassificationModel(
         consts.BERT_MODEL_TYPE,
         consts.BERT_MODEL_NAME,
+        use_cuda=use_cuda,
+        num_labels=3,
+        args=bert_args
+    )
+    return BertWrapper(bert)
+
+def prepare_bert_eval(number_of_rows: int, use_cuda) -> BertWrapper:
+    bert_args = MultiLabelClassificationArgs(
+        num_train_epochs=consts.EPOCHS,
+        overwrite_output_dir=True,
+        output_dir=f"{consts.BERT_OUTPUT}-{number_of_rows}-eval",
+    )
+    bert = MultiLabelClassificationModel(
+        consts.BERT_MODEL_TYPE,
+        f"{consts.BERT_OUTPUT}-{number_of_rows}",
         use_cuda=use_cuda,
         num_labels=3,
         args=bert_args

@@ -1,60 +1,37 @@
 import pandas as pd
-from simpletransformers.classification import ClassificationModel
 import torch
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
-from models.bert import BertWrapper
 import consts
 import utils
 
 # use_cuda = torch.cuda.is_available()
 use_cuda = False
 
-def prepare_bert(number_of_rows: int, num_labels: int) -> BertWrapper:
-    bert_args = consts.BERT_ARGS
-    bert_args.output_dir = f"{consts.BERT_OUTPUT}-{number_of_rows}"
-
-    bert = ClassificationModel(
-        consts.BERT_MODEL_TYPE,
-        consts.BERT_MODEL_NAME,
-        args=bert_args,
-        use_cuda=use_cuda,
-        num_labels=num_labels
-    )
-    return BertWrapper(bert)
-
-
 
 if __name__ == '__main__':
     utils.prepare_environment()
 
-    if consts.ENCODING == "BIO":
-        data = pd.read_csv(consts.CONL_PREPROC_TEST_BIO)
-    if consts.ENCODING == "IO":
-        data = pd.read_csv(consts.CONL_PREPROC_TEST_IO)
-    if consts.ENCODING == "IOB":
-        data = pd.read_csv(consts.CONL_PREPROC_TEST_IOB)
+    data = pd.read_csv(consts.CONL_PREPROC_TEST)
+    data = utils.prepare_multilabel_data(data, consts.INIT_TRAIN_SIZE)
+    data = data.loc[:, ~data.columns.str.contains('^Unnamed')]
+    print(data.head)
+    # inputs = data['text'].astype(str).values.tolist()
+    # labels = data['labels'].astype(int).values.tolist()
 
-    inputs, labels = utils.prepare_evaluation_data(data)
+    # while train_size <= consts.MAX_TRAIN_SIZE:
+    torch.cuda.empty_cache()
+    print("="*100)
+    print(f"Evaluating for nrows={consts.INIT_TRAIN_SIZE}")
 
-    train_size = consts.INIT_TRAIN_SIZE
+    model = utils.prepare_bert_eval(consts.INIT_TRAIN_SIZE, use_cuda)
+    result = model.eval_model(data)
 
-    while train_size <= consts.MAX_TRAIN_SIZE:
-        torch.cuda.empty_cache()
-        print("="*100)
-        print(f"Evaluating for nrows={train_size}")
 
-        model = prepare_bert(train_size, len(data['label1'].unique())+1)
-        inputs = inputs[1: train_size]
-        labels = labels[1: train_size]
-
-        predictions = model.predict(inputs)
-        print(predictions)
-        print(f" -Number of predicted sarcasms: {sum(predictions)}\n")
-
-        print(f" -Precision:  {precision_score(labels, predictions, average='micro')}")
-        print(f" -Accuracy:   {accuracy_score(labels, predictions)}")
-        print(f" -Recall:     {recall_score(labels, predictions, average='weighted')}")
-        print(f" -F1 score:   {f1_score(labels, predictions, average='macro')}")
-
-        train_size += consts.STEP
+    # print(f" -Number of predicted sarcasms: {sum(predictions)}\n")
+    #
+    # print(f" -Precision:  {precision_score(labels, predictions, average='micro')}")
+    # print(f" -Accuracy:   {accuracy_score(labels, predictions)}")
+    # print(f" -Recall:     {recall_score(labels, predictions, average='weighted')}")
+    # print(f" -F1 score:   {f1_score(labels, predictions, average='macro')}")
+    #
+    #     train_size += consts.STEP
