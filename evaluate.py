@@ -44,7 +44,7 @@ if __name__ == '__main__':
         print("="*100)
         print(f"Evaluating for nrows={train_size}")
 
-        model = prepare_bert(train_size, len(data['entityTag'].unique())+1)
+        model = prepare_bert(train_size, len(data['entityTag'].unique()))
         inputs = inputs[1: train_size]
         labels = labels[1: train_size]
 
@@ -53,9 +53,9 @@ if __name__ == '__main__':
         print(labels)
         print(predictions)
 
-        print(f" -Precision:  {precision_score(labels, predictions, average='micro')}")
-        print(f" -Accuracy:   {accuracy_score(labels, predictions)}")
-        print(f" -Recall:     {recall_score(labels, predictions, average='weighted')}")
+        print(f" -Precision:  {precision_score(labels, predictions, average='macro')}")
+        print(f" -Accuracy:   {accuracy_score(labels, predictions) }")
+        print(f" -Recall:     {recall_score(labels, predictions, average='macro')}")
         print(f" -F1 score:   {f1_score(labels, predictions, average='macro')}")
 
         train_size += consts.STEP

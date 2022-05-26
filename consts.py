@@ -29,9 +29,9 @@ CONL_PREPROC_VALID_BIO = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preproce
 
 # INIT_TRAIN_SIZE = 204565
 # MAX_TRAIN_SIZE = 204565
-INIT_TRAIN_SIZE = 200
-MAX_TRAIN_SIZE = 400
-STEP = 200
+INIT_TRAIN_SIZE = 100
+MAX_TRAIN_SIZE = 100
+STEP = 250
 
 #####################################################################
 BERT_MODEL_TYPE = 'roberta'  # bert, roberta, xlm, ...
@@ -40,7 +40,7 @@ BERT_ARGS = ClassificationArgs(
     model_type=BERT_MODEL_TYPE,
     overwrite_output_dir=True,
     train_batch_size=10,
-    num_train_epochs=2,
+    num_train_epochs=15,
     learning_rate=4e-5,
     save_model_every_epoch=False,
 )
