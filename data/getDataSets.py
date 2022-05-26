@@ -45,9 +45,9 @@ def downloadBlurbDataset():
 
 
 def downloadConllDataset():
-    urls = ["https://data.deepai.org/conll2003.zip",
-            "http://www.cnts.ua.ac.be/conll2003/eng.raw.tar",
-            "http://www.cnts.ua.ac.be/conll2003/deu.raw.tar"]
+    urls = ["https://data.deepai.org/conll2003.zip"]
+            # "http://www.cnts.ua.ac.be/conll2003/eng.raw.tar",
+            # "http://www.cnts.ua.ac.be/conll2003/deu.raw.tar"]
 
     print('Downloading CoNLL 2003 dataset, urls: '+str(len(urls)))
     conllPath = os.path.join(os.getcwd() + '/sourceData/conll2003')

@@ -1,7 +1,7 @@
 import pandas as pd
 from simpletransformers.classification import ClassificationModel
 
-from models.abstract_classifier import TextEntityClassifier
+from models.simpleTransformers.abstract_classifier import TextEntityClassifier
 
 
 class BertWrapper(TextEntityClassifier):
@@ -11,7 +11,7 @@ class BertWrapper(TextEntityClassifier):
     def train(self, data):
         self.model.train_model(
             train_df=data,
-            show_running_loss=False
+            show_running_loss=True
         )
 
     def predict(self, inputs):

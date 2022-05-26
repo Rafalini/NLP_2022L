@@ -11,7 +11,7 @@ from sparknlp import SparkSession
 import sparknlp
 
 import consts
-from models.bert import BertWrapper
+from models.simpleTransformers.bert import BertWrapper
 
 
 def seed_torch(seed=2137):

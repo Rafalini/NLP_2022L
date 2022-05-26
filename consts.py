@@ -5,12 +5,12 @@ ENCODING_IOB = "IOB"
 ENCODING_IO = "IO"
 ENCODING_BIO = "BIO"
 
-DATA_DIR = './data/sourceData'
+DATA_DIR = 'data/sourceData'
 CONL_TRAIN_DATASET = os.path.join(DATA_DIR, 'conll2003', 'train.txt')
 CONL_TEST_DATASET = os.path.join(DATA_DIR, 'conll2003', 'test.txt')
 CONL_VALID_DATASET = os.path.join(DATA_DIR, 'conll2003', 'valid.txt')
 
-DATA_PROCESSED_DIR = './data/preprocessedData'
+DATA_PROCESSED_DIR = 'data/preprocessedData'
 
 CONL_PREPROC_TRAIN = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_train.csv')
 CONL_PREPROC_TEST = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_test.csv')

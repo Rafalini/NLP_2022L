@@ -1,6 +1,6 @@
 import pandas as pd
 
-from models.abstract_classifier import TextEntityClassifier
+from models.simpleTransformers.abstract_classifier import TextEntityClassifier
 
 
 class OurTrainer:
