@@ -1,9 +1,9 @@
 import os
 from simpletransformers.classification import ClassificationArgs
 
-ENCODING = "IOB"
+# ENCODING = "IOB"
 # ENCODING = "IO"
-# ENCODING = "BIO"
+ENCODING = "BIO"
 
 DATA_DIR = './data/sourceData'
 CONL_TRAIN_DATASET = os.path.join(DATA_DIR, 'conll2003', 'train.txt')
@@ -11,6 +11,10 @@ CONL_TEST_DATASET = os.path.join(DATA_DIR, 'conll2003', 'test.txt')
 CONL_VALID_DATASET = os.path.join(DATA_DIR, 'conll2003', 'valid.txt')
 
 DATA_PROCESSED_DIR = './data/preprocessedData'
+CONL_PREPROC_TRAIN = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_train.csv')
+CONL_PREPROC_TEST = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_test.csv')
+CONL_PREPROC_VALID = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_valid.csv')
+
 CONL_PREPROC_TRAIN_IOB = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_train_IOB.csv')
 CONL_PREPROC_TEST_IOB = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_test_IOB.csv')
 CONL_PREPROC_VALID_IOB = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preprocessed_valid_IOB.csv')
@@ -25,15 +29,19 @@ CONL_PREPROC_VALID_BIO = os.path.join(DATA_PROCESSED_DIR, 'conll2003', 'preproce
 
 # INIT_TRAIN_SIZE = 204565
 # MAX_TRAIN_SIZE = 204565
-INIT_TRAIN_SIZE = 100
-MAX_TRAIN_SIZE = 100
-STEP = 100
+INIT_TRAIN_SIZE = 200
+MAX_TRAIN_SIZE = 400
+STEP = 200
 
 #####################################################################
 BERT_MODEL_TYPE = 'roberta'  # bert, roberta, xlm, ...
 BERT_MODEL_NAME = 'roberta-base'
 BERT_ARGS = ClassificationArgs(
     model_type=BERT_MODEL_TYPE,
-    overwrite_output_dir=True
+    overwrite_output_dir=True,
+    train_batch_size=10,
+    num_train_epochs=2,
+    learning_rate=4e-5,
+    save_model_every_epoch=False,
 )
 BERT_OUTPUT = 'bert-output'

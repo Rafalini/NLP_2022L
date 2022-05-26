@@ -12,11 +12,11 @@ use_cuda = False
 
 def prepare_bert(number_of_rows: int, num_labels: int) -> BertWrapper:
     bert_args = consts.BERT_ARGS
-    bert_args.output_dir = f"{consts.BERT_OUTPUT}-{number_of_rows}"
+    bert_args.output_dir = f"{consts.BERT_OUTPUT}-{number_of_rows}-eval"
 
     bert = ClassificationModel(
         consts.BERT_MODEL_TYPE,
-        consts.BERT_MODEL_NAME,
+        f"{consts.BERT_OUTPUT}-{number_of_rows}",
         args=bert_args,
         use_cuda=use_cuda,
         num_labels=num_labels
@@ -49,8 +49,9 @@ if __name__ == '__main__':
         labels = labels[1: train_size]
 
         predictions = model.predict(inputs)
+        print(inputs)
+        print(labels)
         print(predictions)
-        print(f" -Number of predicted sarcasms: {sum(predictions)}\n")
 
         print(f" -Precision:  {precision_score(labels, predictions, average='micro')}")
         print(f" -Accuracy:   {accuracy_score(labels, predictions)}")

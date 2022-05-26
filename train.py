@@ -32,22 +32,27 @@ if __name__ == '__main__':
 
     if consts.ENCODING == "BIO":
         raw_train_data = pd.read_csv(consts.CONL_PREPROC_TRAIN_BIO)
-    if consts.ENCODING == "IO":
+    elif consts.ENCODING == "IO":
         raw_train_data = pd.read_csv(consts.CONL_PREPROC_TRAIN_IO)
-    if consts.ENCODING == "IOB":
+    elif consts.ENCODING == "IOB":
         raw_train_data = pd.read_csv(consts.CONL_PREPROC_TRAIN_IOB)
+    else:
+        print("unknown dataset")
+        exit(1)
 
     # test_data = pd.read_csv(consts.TEST_DATA)
     # test_inputs, test_labels = utils.prepare_evaluation_data(test_data)
 
     train_size = consts.INIT_TRAIN_SIZE
+
     while train_size <= consts.MAX_TRAIN_SIZE:
         torch.cuda.empty_cache()
         print("=" * 100)
         print(f"Training for nrows={train_size}")
+
         data = raw_train_data[0: train_size]
         # print(data['label1'].value_counts())
-        model = prepare_bert(train_size, len(data['entityTag'].unique())+1)
+        model = prepare_bert(train_size, len(raw_train_data['entityTag'].unique())+1)
         trainer = OurTrainer(model)
         trainer.train(data)
 
